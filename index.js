@@ -2,8 +2,24 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const { engine } = require("express-handlebars");
+const request = require("request");
 
 const PORT = process.env.PORT || 5000;
+
+// Request API Key from IEX Cloud Service
+request(
+  "https://cloud.iexapis.com/stable/stock/fb/quote?token=sk_b621ff26724547b3975b39d2cbc9aff8",
+  { json: true },
+  (err, res, body) => {
+    // Checking the response API
+    if (err) {
+      return console.log(err);
+    }
+    if (res.statusCode === 200) {
+      console.log(body);
+    }
+  }
+);
 
 // Set Handlebars Middleware
 app.engine("handlebars", engine());
