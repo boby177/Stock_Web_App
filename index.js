@@ -18,6 +18,10 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/about.html", (req, res) => {
+  res.render("about");
+});
+
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
 
