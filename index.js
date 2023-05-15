@@ -7,19 +7,22 @@ const request = require("request");
 const PORT = process.env.PORT || 5000;
 
 // Request API Key from IEX Cloud Service
-request(
-  "https://cloud.iexapis.com/stable/stock/fb/quote?token=sk_b621ff26724547b3975b39d2cbc9aff8",
-  { json: true },
-  (err, res, body) => {
-    // Checking the response API
-    if (err) {
-      return console.log(err);
+function getRequestAPI(response) {
+  request(
+    "https://cloud.iexapis.com/stable/stock/fb/quote?token=sk_b621ff26724547b3975b39d2cbc9aff8",
+    { json: true },
+    (err, res, body) => {
+      // Checking the response API
+      if (err) {
+        return console.log(err);
+      }
+      if (res.statusCode === 200) {
+        // console.log(body);
+        response(body);
+      }
     }
-    if (res.statusCode === 200) {
-      console.log(body);
-    }
-  }
-);
+  );
+}
 
 // Set Handlebars Middleware
 app.engine("handlebars", engine());
@@ -29,8 +32,10 @@ const otherStuff = "This is other stuff!";
 
 // Set handlebars routes
 app.get("/", (req, res) => {
-  res.render("home", {
-    stuff: otherStuff,
+  getRequestAPI(function (responseAPI) {
+    res.render("home", {
+      stuff: responseAPI,
+    });
   });
 });
 
